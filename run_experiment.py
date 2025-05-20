@@ -32,7 +32,7 @@ def run_single_experiment(algo: str, env_name: str, seed: int):
     result_dir = os.path.join("results", algo.lower(), env_name)
     summary_path = os.path.join(result_dir, f"seed{seed}_summary.json")
     if os.path.exists(summary_path):
-        print(f"[已存在] {algo} on {env_name} (seed {seed}) 已有 summary，跳过。")
+        print(f"[existed] {algo} on {env_name} (seed {seed})")
         return None
 
     from gymnasium import spaces
@@ -40,10 +40,8 @@ def run_single_experiment(algo: str, env_name: str, seed: int):
     is_discrete = isinstance(env.action_space, spaces.Discrete)
     is_continuous = isinstance(env.action_space, spaces.Box)
     if algo == 'DQN' and not is_discrete:
-        print(f"[跳过] {algo} 不支持连续动作空间环境 {env_name}，已跳过。")
         return None
     if algo in ['SAC', 'DDPG'] and not is_continuous:
-        print(f"[跳过] {algo} 只适用于连续动作空间环境，{env_name} 为离散动作空间，已跳过。")
         return None
 
     set_seed(seed)
@@ -75,7 +73,6 @@ def run_single_experiment(algo: str, env_name: str, seed: int):
     total_timesteps = get_env_config(env_name)['total_timesteps']
     model.learn(total_timesteps=total_timesteps, callback=eval_callback)
 
-    # 导出评估过程为csv
     eval_data_path = os.path.join(eval_log_dir, "evaluations.npz")
     if os.path.exists(eval_data_path):
         data = np.load(eval_data_path)
@@ -91,7 +88,6 @@ def run_single_experiment(algo: str, env_name: str, seed: int):
         })
         df.to_csv(os.path.join(eval_log_dir, "eval_curve.csv"), index=False)
 
-    # 只保存 summary，指向 eval_curve.csv
     results = {
         "algo": algo,
         "env": env_name,
@@ -104,7 +100,6 @@ def run_single_experiment(algo: str, env_name: str, seed: int):
     return results
 
 def run_single_seed(args):
-    """运行单个种子的实验（用于并行处理）"""
     algo, env_name, seed = args
     return run_single_experiment(algo, env_name, seed)
 
@@ -122,11 +117,11 @@ def get_unfinished_args():
 def main():
     args = parse_args()
     if args.algo and args.env:
-        # 检查 experiment_summary.json 是否存在
+ 
         result_dir = os.path.join("results", args.algo.lower(), args.env)
         exp_summary_path = os.path.join(result_dir, "experiment_summary.json")
         if os.path.exists(exp_summary_path):
-            print(f"[已存在] {args.algo} on {args.env} 所有种子已完成，跳过。")
+            print(f"{args.algo} on {args.env} completed")
             return
         seeds = [args.seed] if args.seed is not None else SEEDS
         parallel_args = [(args.algo, args.env, seed) for seed in seeds]
@@ -141,15 +136,14 @@ def main():
         valid_results = [r for r in all_results if r is not None]
         if valid_results:
             aggregate_results(args.algo, args.env, valid_results)
-        else:
-            print(f"[跳过聚合] {args.algo} on {args.env} 没有有效实验结果，跳过聚合。")
+  
     else:
         for algo in ALGORITHMS:
             for env_name in ENVIRONMENTS:
                 result_dir = os.path.join("results", algo.lower(), env_name)
                 exp_summary_path = os.path.join(result_dir, "experiment_summary.json")
                 if os.path.exists(exp_summary_path):
-                    print(f"[已存在] {algo} on {env_name} 所有种子已完成，跳过。")
+                    print(f"{algo} on {env_name} completed")
                     continue
                 print(f"\nRunning {algo} on {env_name}")
                 seeds = SEEDS
@@ -165,8 +159,7 @@ def main():
                 valid_results = [r for r in all_results if r is not None]
                 if valid_results:
                     aggregate_results(algo, env_name, valid_results)
-                else:
-                    print(f"[跳过聚合] {algo} on {env_name} 没有有效实验结果，跳过聚合。")
+           
 
 if __name__ == "__main__":
     main()
