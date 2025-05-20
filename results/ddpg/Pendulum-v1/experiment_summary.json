@@ -1,0 +1,11 @@
+{
+    "environment": "Pendulum-v1",
+    "algorithm": "DDPG",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -147.90631600573658,
+        "final_reward_std": 18.008127399344215,
+        "final_reward_min": -173.05798766820226,
+        "final_reward_max": -123.94442587272496
+    }
+}

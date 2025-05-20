@@ -1,0 +1,11 @@
+{
+    "environment": "LunarLander-v3",
+    "algorithm": "A2C",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 25.257781675512188,
+        "final_reward_std": 67.85736664119395,
+        "final_reward_min": -56.60162811856717,
+        "final_reward_max": 101.34819426476052
+    }
+}

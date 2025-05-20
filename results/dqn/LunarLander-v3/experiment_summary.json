@@ -1,0 +1,11 @@
+{
+    "environment": "LunarLander-v3",
+    "algorithm": "DQN",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 29.65419031787307,
+        "final_reward_std": 141.2169104918329,
+        "final_reward_min": -166.06802367623314,
+        "final_reward_max": 183.2099578995129
+    }
+}

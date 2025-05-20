@@ -1,0 +1,11 @@
+{
+    "environment": "Pendulum-v1",
+    "algorithm": "PPO",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -378.4794228436252,
+        "final_reward_std": 136.10001397345562,
+        "final_reward_min": -513.8693577825325,
+        "final_reward_max": -167.96508553275544
+    }
+}

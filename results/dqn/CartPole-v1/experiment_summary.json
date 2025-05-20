@@ -1,0 +1,11 @@
+{
+    "environment": "CartPole-v1",
+    "algorithm": "DQN",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 331.28000000000003,
+        "final_reward_std": 158.1685480745145,
+        "final_reward_min": 123.2,
+        "final_reward_max": 500.0
+    }
+}

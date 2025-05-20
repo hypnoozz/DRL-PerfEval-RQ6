@@ -1,0 +1,11 @@
+{
+    "environment": "LunarLander-v3",
+    "algorithm": "PPO",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 84.71493619971328,
+        "final_reward_std": 123.46578086629725,
+        "final_reward_min": -132.59904150855726,
+        "final_reward_max": 224.63664755705403
+    }
+}

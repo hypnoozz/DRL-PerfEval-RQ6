@@ -1,0 +1,11 @@
+{
+    "environment": "BipedalWalker-v3",
+    "algorithm": "A2C",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -83.63240246778355,
+        "final_reward_std": 51.84068294968136,
+        "final_reward_min": -125.57220386713745,
+        "final_reward_max": 11.374099071510136
+    }
+}

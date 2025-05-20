@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -172,3 +173,20 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+=======
+**/seed*.json
+**/eval/
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+ENV/
+.python-version
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+
+>>>>>>> e1c9c6a (Update files with .gitignore)

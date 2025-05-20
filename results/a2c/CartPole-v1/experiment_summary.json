@@ -1,0 +1,11 @@
+{
+    "environment": "CartPole-v1",
+    "algorithm": "A2C",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 299.28000000000003,
+        "final_reward_std": 172.4664651461263,
+        "final_reward_min": 82.0,
+        "final_reward_max": 500.0
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "environment": "Pendulum-v1",
+    "algorithm": "A2C",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -1032.476634658007,
+        "final_reward_std": 189.91358401921573,
+        "final_reward_min": -1270.9812921803446,
+        "final_reward_max": -778.6878370797261
+    }
+}

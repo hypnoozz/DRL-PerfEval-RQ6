@@ -1,0 +1,11 @@
+{
+    "environment": "CartPole-v1",
+    "algorithm": "PPO",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 500.0,
+        "final_reward_std": 0.0,
+        "final_reward_min": 500.0,
+        "final_reward_max": 500.0
+    }
+}

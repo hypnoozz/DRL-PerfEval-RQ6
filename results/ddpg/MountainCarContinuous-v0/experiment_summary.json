@@ -1,0 +1,11 @@
+{
+    "environment": "MountainCarContinuous-v0",
+    "algorithm": "DDPG",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -0.01692550055068746,
+        "final_reward_std": 0.012300716295691915,
+        "final_reward_min": -0.0369405086748884,
+        "final_reward_max": -0.0028642007219332
+    }
+}

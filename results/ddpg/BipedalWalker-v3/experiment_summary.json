@@ -1,0 +1,11 @@
+{
+    "environment": "BipedalWalker-v3",
+    "algorithm": "DDPG",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -80.9606989246141,
+        "final_reward_std": 55.50510370660305,
+        "final_reward_min": -153.96118794931098,
+        "final_reward_max": 13.600786629319192
+    }
+}

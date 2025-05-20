@@ -1,0 +1,11 @@
+{
+    "environment": "MountainCarContinuous-v0",
+    "algorithm": "A2C",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": -0.0028352819029205402,
+        "final_reward_std": 0.003228792675329262,
+        "final_reward_min": -0.0090238308332118,
+        "final_reward_max": -0.0005141171260461
+    }
+}

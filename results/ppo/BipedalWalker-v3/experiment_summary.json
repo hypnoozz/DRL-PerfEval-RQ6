@@ -1,0 +1,11 @@
+{
+    "environment": "BipedalWalker-v3",
+    "algorithm": "PPO",
+    "seeds": 5,
+    "performance": {
+        "final_reward_mean": 53.856745091932815,
+        "final_reward_std": 104.1024944799528,
+        "final_reward_min": -99.65325498506428,
+        "final_reward_max": 167.40697190677747
+    }
+}
