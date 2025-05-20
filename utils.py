@@ -12,21 +12,17 @@ import gymnasium as gym
 
 class ExperimentLogger:
     def __init__(self, algo_name: str, env_name: str, seed: int):
-        """初始化实验记录器"""
         self.algo_name = algo_name
         self.env_name = env_name
         self.seed = seed
         
-        # 创建实验目录
         self.results_dir = os.path.join("results", algo_name.lower(), env_name)
         os.makedirs(self.results_dir, exist_ok=True)
         
-        # 创建tensorboard目录
         self.tensorboard_dir = os.path.join(self.results_dir, "tensorboard")
         os.makedirs(self.tensorboard_dir, exist_ok=True)
         self.writer = SummaryWriter(self.tensorboard_dir)
         
-        # 初始化结果字典
         self.results = {
             'algo_name': algo_name,
             'env_name': env_name,
@@ -52,7 +48,7 @@ class ExperimentLogger:
     def log_episode(self, episode: int, reward: float, length: int,
                    value_loss: float = None, policy_loss: float = None,
                    success: bool = None, timesteps: int = None, **kwargs):
-        """记录每个episode的结果"""
+
         self.total_episodes += 1
         if timesteps is not None:
             self.total_timesteps = timesteps
@@ -64,11 +60,10 @@ class ExperimentLogger:
         self.results['raw_rewards'].append(reward)
         self.results['timesteps'].append(self.total_timesteps)
         
-        # 更新最大/最小奖励
+
         self.max_reward = max(self.max_reward, reward)
         self.min_reward = min(self.min_reward, reward)
-        
-        # 计算平滑奖励
+
         if len(self.results['raw_rewards']) >= 100:
             smoothed_reward = np.mean(self.results['raw_rewards'][-100:])
             self.results['smoothed_rewards'].append(smoothed_reward)
@@ -84,11 +79,11 @@ class ExperimentLogger:
         if success is not None:
             self.results['success_rate'].append(float(success))
             
-        # 记录到tensorboard
+
         self.writer.add_scalar('Reward/episode', reward, self.total_timesteps)
         self.writer.add_scalar('Length/episode', length, self.total_timesteps)
         
-        # 记录其他自定义指标
+
         for key, value in kwargs.items():
             if key not in self.results:
                 self.results[key] = []
@@ -96,13 +91,11 @@ class ExperimentLogger:
             self.writer.add_scalar(f'Custom/{key}', value, self.total_timesteps)
             
     def save_results(self):
-        """保存实验结果"""
-        # 计算最终统计信息
+
         final_avg_reward = np.mean(self.results['rewards'][-100:]) if self.results['rewards'] else 0
         final_avg_length = np.mean(self.results['lengths'][-100:]) if self.results['lengths'] else 0
         final_avg_loss = np.mean(self.results['value_losses'][-100:]) if self.results['value_losses'] else 0
-        
-        # 创建summary字典
+
         summary = {
             'env_name': self.env_name,
             'algorithm': self.algo_name,
@@ -129,14 +122,13 @@ class ExperimentLogger:
             }
         }
         
-        # 保存CSV日志
         df_dict = {
             'timestep': self.results['timesteps'],
             'reward': self.results['raw_rewards'],
             'length': self.results['lengths'],
         }
         
-        # 只添加长度一致的字段
+
         if len(self.results['smoothed_rewards']) == len(self.results['raw_rewards']):
             df_dict['smoothed_reward'] = self.results['smoothed_rewards']
         if len(self.results['value_losses']) == len(self.results['raw_rewards']):
@@ -153,7 +145,6 @@ class ExperimentLogger:
         return summary
         
     def _find_solving_step(self, threshold):
-        """找到首次达到解决标准的时间步"""
         if not self.results['rewards']:
             return None
             
@@ -164,7 +155,6 @@ class ExperimentLogger:
         return None
         
     def _generate_plots(self):
-        """生成并保存可视化图表"""
         # 1. Reward vs Timestep - Raw Curve
         plt.figure(figsize=(10, 6))
         plt.plot(self.results['timesteps'], self.results['raw_rewards'])
@@ -203,18 +193,15 @@ class ExperimentLogger:
             plt.close()
             
 def set_seed(seed: int):
-    """设置随机种子"""
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
     np.random.seed(seed)
 
 def create_env(env_name: str):
-    """创建环境实例"""
     return gym.make(env_name)
 
 def evaluate_policy(env, policy, n_episodes=10, max_steps=1000):
-    """评估策略的性能"""
     rewards = []
     lengths = []
     successes = []
@@ -228,8 +215,8 @@ def evaluate_policy(env, policy, n_episodes=10, max_steps=1000):
         while not done and episode_length < max_steps:
             action = policy(state)
             if isinstance(action, np.ndarray):
-                action = action.item()  # 转换为标量
-            next_state, reward, terminated, truncated, info = env.step(action)  # gymnasium返回5个值
+                action = action.item() 
+            next_state, reward, terminated, truncated, info = env.step(action) 
             done = terminated or truncated
             total_reward += reward
             episode_length += 1
@@ -237,7 +224,7 @@ def evaluate_policy(env, policy, n_episodes=10, max_steps=1000):
             
         rewards.append(total_reward)
         lengths.append(episode_length)
-        # 某些环境可能在info中提供是否成功的信息
+       
         if 'is_success' in info:
             successes.append(info['is_success'])
             
@@ -254,10 +241,10 @@ def evaluate_policy(env, policy, n_episodes=10, max_steps=1000):
     return results 
 
 def aggregate_results(algo: str, env_name: str, all_results: list):
-    """聚合多个种子的结果并生成汇总图表和统计信息"""
+   
     results_dir = os.path.join("results", algo.lower(), env_name)
 
-    # 1. 读取所有种子的 eval_curve.csv
+   
     eval_curves = []
     for result in all_results:
         eval_curve_path = result.get("eval_curve_csv")
@@ -268,7 +255,6 @@ def aggregate_results(algo: str, env_name: str, all_results: list):
         print("No eval curves found.")
         return
 
-    # 2. 对齐所有曲线（以最短的为准）
     min_len = min(len(df) for df in eval_curves)
     timesteps = eval_curves[0]["timestep"][:min_len]
     rewards = np.stack([df["reward"][:min_len].values for df in eval_curves])
@@ -279,7 +265,6 @@ def aggregate_results(algo: str, env_name: str, all_results: list):
     mean_lengths = lengths.mean(axis=0)
     std_lengths = lengths.std(axis=0)
 
-    # 3. 学习曲线
     plt.figure(figsize=(10, 6))
     plt.plot(timesteps, mean_rewards, label="Mean Reward", color="blue")
     plt.fill_between(timesteps, mean_rewards-std_rewards, mean_rewards+std_rewards, alpha=0.2, color="blue")
@@ -291,7 +276,6 @@ def aggregate_results(algo: str, env_name: str, all_results: list):
     plt.savefig(os.path.join(results_dir, "learning_curve.png"))
     plt.close()
 
-    # 4. reward分布直方图（最后一个评估点）
     final_rewards = rewards[:, -1]
     plt.figure(figsize=(10, 6))
     plt.hist(final_rewards, bins=10, alpha=0.7, color="blue")
@@ -304,7 +288,6 @@ def aggregate_results(algo: str, env_name: str, all_results: list):
     plt.savefig(os.path.join(results_dir, "final_reward_hist.png"))
     plt.close()
 
-    # 5. 最终表现柱状图
     plt.figure(figsize=(6, 6))
     plt.bar(['Final Performance'], [np.mean(final_rewards)], yerr=[np.std(final_rewards)],
             capsize=5, alpha=0.7, color='blue')
@@ -314,7 +297,6 @@ def aggregate_results(algo: str, env_name: str, all_results: list):
     plt.savefig(os.path.join(results_dir, "final_performance_bar.png"))
     plt.close()
 
-    # 6. 保存汇总统计
     summary = {
         'environment': env_name,
         'algorithm': algo,
@@ -328,5 +310,3 @@ def aggregate_results(algo: str, env_name: str, all_results: list):
     }
     with open(os.path.join(results_dir, 'experiment_summary.json'), 'w') as f:
         json.dump(summary, f, indent=4)
-
-    print(f"图表和汇总已保存到 {results_dir}") 
