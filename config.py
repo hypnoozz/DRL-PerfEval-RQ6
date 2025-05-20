@@ -2,16 +2,12 @@ import gymnasium as gym
 from typing import Dict, List, Tuple
 import torch
 
-# 设备配置
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# 随机种子配置
 SEEDS: List[int] = [1, 2, 3, 4, 5]
 
-# 算法配置
 ALGORITHMS = ['DQN', 'PPO', 'A2C', 'SAC', 'DDPG']
 
-# 环境配置
 ENVIRONMENTS: List[str] = [
     'CartPole-v1',
     'Pendulum-v1',
@@ -20,27 +16,16 @@ ENVIRONMENTS: List[str] = [
     'BipedalWalker-v3'
 ]
 
-# 训练配置
 USE_UNIFIED_TRAINING_STEPS = True  # 强制使用统一步数
 UNIFIED_TRAINING_STEPS = 200_000
 
-# 环境特定训练步数配置
-ENV_TRAINING_STEPS = {
-    'CartPole-v1': 200_000,
-    'Pendulum-v1': 200_000,
-    'MountainCarContinuous-v0': 200_000,
-    'LunarLander-v3': 200_000,
-    'BipedalWalker-v3': 200_000,
-}
-
-# 通用网络配置
 NETWORK_CONFIG = {
-    'hidden_sizes': [256, 256],    # 隐藏层大小
-    'activation': 'ReLU',          # 激活函数
-    'learning_rate': 3e-4,         # 学习率
+    'hidden_sizes': [256, 256], 
+    'activation': 'ReLU',      
+    'learning_rate': 3e-4,      
 }
 
-# 算法特定配置
+
 ALGO_SPECIFIC_CONFIG = {
     "DQN": {
         'buffer_size': 100_000,
@@ -78,14 +63,13 @@ ALGO_SPECIFIC_CONFIG = {
     },
 }
 
-# 日志配置
+
 LOG_CONFIG = {
     'log_dir': 'logs',
     'model_dir': 'models',
-    'results_dir': 'results',  # 结果将保存在 results/算法/环境/ 目录下
+    'results_dir': 'results', 
 }
 
-# 实验结果保存的指标
 METRICS = [
     'episode_reward',
     'episode_length',
@@ -93,29 +77,28 @@ METRICS = [
     'training_time',
     'average_value_loss',
     'average_policy_loss',
-    'raw_rewards',  # 原始奖励
-    'smoothed_rewards',  # 平滑后的奖励
-    'final_reward_distribution',  # 最终奖励分布
-    'early_phase_rewards',  # 早期阶段奖励
+    'raw_rewards',  
+    'smoothed_rewards',  
+    'final_reward_distribution', 
+    'early_phase_rewards',  
 ]
 
 UNIFIED_TRAINING_CONFIG = {
-    'total_timesteps': 200_000,      # 固定为200k步
-    'num_seeds': 5,                  # 5个随机种子
-    'gamma': 0.99,                   # 折扣因子
-    'learning_rate': 3e-4,           # 学习率
-    'optimizer': 'Adam',             # 优化器
-    'batch_size': 64,                # batch大小
-    'eval_frequency': 10_000,        # 每1万步评估一次
-    'reward_normalization': True,    # 启用奖励归一化
+    'total_timesteps': 200_000,      
+    'num_seeds': 5,                
+    'gamma': 0.99,                   
+    'learning_rate': 3e-4,           
+    'optimizer': 'Adam',            
+    'batch_size': 64,                
+    'eval_frequency': 10_000,       
+    'reward_normalization': True,    
     'env_wrapper': 'GymMonitor+CustomLogger',
-    'early_stopping': False,         # 不使用早停(固定步数)
-    'early_phase_steps': 50_000,     # 早期阶段步数
-    'smoothing_window': 100,         # 奖励平滑窗口
+    'early_stopping': False,         
+    'early_phase_steps': 50_000,     
+    'smoothing_window': 100,         
 }
 
 def get_env_config(env_id: str) -> Dict:
-    """获取特定环境的配置"""
     base_config = {
         'CartPole-v1': {
             'success_threshold': 195.0,
